@@ -11,8 +11,17 @@ var handler = function(req,res){
 		
 	} else if (req.url==="/uploads"){
 		if (req.method==='POST'){
-			res.writeHead(200, {'Content-Type': 'text/plain'});
-			res.end('Handling it\n');
+			var upload ="";
+			req.on("data", function(chunk){
+				upload += chunk;
+				console.log("chunk: ", chunk);
+			
+			});
+			req.on("end", function() {
+            console.log("Handling the upload: ", upload.length);
+            res.writeHead(200, {'Content-Type': 'text/plain'});
+            res.end('handling it');
+			});
 		} else {
 			res.writeHead(200, {'Content-Type': 'text/html'});
 			res.end('<html><head><title>UPLOADZ!</title><body><form action="/uploads" method="POST" enctype="multipart/form-data"><input type="file" name="the_file"><input type="submit" value="Upload">');
